@@ -1,7 +1,7 @@
 # docker-tomcat
 
 ```
-docker run p0bailey/docker-tomcat
+docker run -d  p0bailey/docker-tomcat
 
 ```
 
