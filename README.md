@@ -1,5 +1,7 @@
-# docker-tomcat
+To run.
 
-Brances are related to different Linux distributions.
+docker run -d -p 8080:8080 p0bailey/docker-tomcat
 
-See https://github.com/p0bailey/docker-tomcat/tree/centos
+
+WebApp:
+http://<docker_host_ip:8080/sample/
