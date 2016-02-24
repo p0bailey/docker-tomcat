@@ -22,7 +22,7 @@ RUN chown -R tomcat. /usr/apache-tomcat-8.0.32
 COPY tomcat.sh $CATALINA_HOME/bin/tomcat.sh
 RUN chmod +x $CATALINA_HOME/bin/*.sh
 
-COPY sample.war $CATALINA_HOME/webapps
+COPY sample.war $CATALINA_HOME/webapps/
 
 WORKDIR /usr/tomcat
 
