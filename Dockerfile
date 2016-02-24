@@ -1,41 +1,30 @@
-#Tomcat on CentOS 7
-FROM centos:7
-MAINTAINER phillip@bailey.st
-
-# Install missing packages
-RUN yum install -y wget tar
+FROM p0bailey/docker-java
+MAINTAINER Phillip Bailey  <phillip@bailey.st>
 
 # Preparing Java/Tomcat ENV
-ENV JAVA_HOME /opt/java
-ENV CATALINA_HOME /opt/tomcat
+#ENV JAVA_HOME /usr/java
+ENV CATALINA_HOME /usr/tomcat
 ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/bin:$CATALINA_HOME/scripts
 
-# Go and get Java package
-RUN wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" \
-	http://download.oracle.com/otn-pub/java/jdk/7u71-b14/jdk-7u71-linux-x64.tar.gz && \
-	tar -xvf jdk-7u71-linux-x64.tar.gz && \
-	rm jdk*.tar.gz && \
-	mv jdk* ${JAVA_HOME}
+RUN yum -y update
+RUN yum -y install wget; yum clean all
+RUN adduser tomcat -M -d /usr/tomcat
+RUN wget http://www.us.apache.org/dist/tomcat/tomcat-8/v8.0.32/bin/apache-tomcat-8.0.32.tar.gz
+RUN tar zxvf apache-tomcat-8.0.32.tar.gz -C /usr/
 
+RUN ln -s /usr/apache-tomcat-8.0.32 /usr/tomcat
 
-# Go and get Tomcat
-RUN wget http://mirrors.ukfast.co.uk/sites/ftp.apache.org/tomcat/tomcat-8/v8.0.24/bin/apache-tomcat-8.0.24.tar.gz && \
-	tar -xvf apache-tomcat-8.0.24.tar.gz && \
-	rm apache-tomcat*.tar.gz && \
-	mv apache-tomcat* ${CATALINA_HOME}
+#Deletes unwanted stuff
+RUN rm -rf $CATALINA_HOME/webapps/{docs,examples,host-manager,manager,ROOT}
 
-RUN chmod +x ${CATALINA_HOME}/bin/*sh
+RUN chown -R tomcat. /usr/apache-tomcat-8.0.32
 
+COPY tomcat.sh $CATALINA_HOME/bin/tomcat.sh
+RUN chmod +x $CATALINA_HOME/bin/*.sh
 
-ADD tomcat.sh $CATALINA_HOME/scripts/tomcat.sh
-RUN chmod +x $CATALINA_HOME/scripts/*.sh
+COPY sample.war $CATALINA_HOME/webapps
 
-
-RUN groupadd -r tomcat && \
-	useradd -g tomcat -d ${CATALINA_HOME} -s /sbin/nologin  -c "Tomcat user" tomcat && \
-	chown -R tomcat:tomcat ${CATALINA_HOME}
-
-WORKDIR /opt/tomcat
+WORKDIR /usr/tomcat
 
 USER tomcat
 CMD ["tomcat.sh"]
