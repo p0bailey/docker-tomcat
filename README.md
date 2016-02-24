@@ -1,4 +1,3 @@
-
 To build.
 
 docker build -t tomcat .
