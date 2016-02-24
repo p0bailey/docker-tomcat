@@ -2,7 +2,4 @@
 
 Brances are related to different Linux distributions.
 
-```
-docker run p0bailey/docker-tomcat
-
-```
+See https://github.com/p0bailey/docker-tomcat/tree/centos
