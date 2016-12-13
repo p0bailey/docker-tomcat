@@ -7,4 +7,4 @@ To run.
 docker run -d -p 8080:8080 p0bailey/docker-tomcat
 
 WebApp:
-http://<docker_machine_ip_address>:8080/sample/
+http://127.0.0.1:8080/sample/
